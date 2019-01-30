@@ -1,25 +1,5 @@
 <?php
 session_start();
-if(isset($_SESSION["user"])) {
-    header('Location: ./');
-    die();
-}
-
-if($_SERVER['REQUEST_METHOD'] === 'POST') {
-    require_once("database/MasterDBProvider.php");
-    $masterDatabaseProvider = MasterDBProvider::getDBProvider();
-
-    $username = $_POST['username'];
-    $password = $_POST['password'];
-    $error = "";
-
-    $user = $masterDatabaseProvider->getUser($username, $password);
-    if ($user === "") {
-        $error = "Error logging you in.";
-    } else {
-        $_SESSION["user"] = $user;
-    }
-}
 ?>
 
 <!DOCTYPE html>
@@ -28,7 +8,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="description" content="Webtest Login">
-        <title>Webtest Login</title>
+        <title>Webtest Home</title>
 
         <link rel="stylesheet" type="text/css" href="assets/css/webtest.css">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
@@ -44,10 +24,10 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
             <div class="order-2 order-md-1">
                 <ul class="navbar-nav px-3">
-                    <?php if(isset($user) && $user !== "") {?>
+                    <?php if(isset($_SESSION["user"])) {?>
                         <li class="nav-item text-nowrap">
                             <a class="nav-link"
-                                href="#"><?php echo $user; ?></a>
+                                href="#"><?php echo $_SESSION["user"]; ?></a>
                         </li>
                         <li class="nav-item text-nowrap">
                             <a class="nav-link"
@@ -68,30 +48,19 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
         </nav>
         <main role="main" class="container">
             <div class="my-3 p-3 bg-white rounded box-shadow">
-                <h1>Login Page</h1>
+                <h1>Home Page</h1>
                 <br />
-                <?php if(isset($user) && $user !== "") {?>
-                    <div> Welcome, <?php echo $user; ?>! </div>
-                <?php } else {?>
-                    <?php if(isset($error) && $error !== "") {?>
-                        <div class="alert alert-danger"> <?php echo $error; ?></div>
-                    <?php } ?>
-                    <form action="./login.php" method="post">
-                        <div>
-                            <div class="form-group">
-                                <label class="form-control-label required" for="username">Username</label>
-                                <input type="text" id="username" name="username" required="required" class="form-control">
-                            </div>
-                            <div class="form-group">
-                                <label class="form-control-label required" for="password">Password</label>
-                                <input type="password" id="password" name="password" required="required" class="form-control">
-                            </div>
-                            <div class="form-group">
-                                <button type="submit" id="login" name="login" class="btn-secondary btn">Login</button>
-                            </div>
+                <form action="./search.php" method="post">
+                    <div>
+                        <div class="form-group">
+                            <label class="form-control-label required" for="search">Search</label>
+                            <input type="text" id="search" name="search" required="required" class="form-control">
                         </div>
-                    </form>
-                <?php } ?>
+                        <div class="form-group">
+                            <button type="submit" id="search" name="search" class="btn-secondary btn">Search</button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </main> 
     </body>

@@ -1,4 +1,9 @@
 <?php
+session_start();
+if(isset($_SESSION["user"])) {
+    header('Location: ./');
+    die();
+}
 
 if($_SERVER['REQUEST_METHOD'] === 'POST') {
     require_once("database/MasterDBProvider.php");
@@ -112,4 +117,3 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
         </main> 
     </body>
 </html>
-
