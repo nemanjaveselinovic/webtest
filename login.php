@@ -9,11 +9,11 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
     require_once("database/MasterDBProvider.php");
     $masterDatabaseProvider = MasterDBProvider::getDBProvider();
 
-    $username = $_POST['username'];
+    $email = $_POST['email'];
     $password = $_POST['password'];
     $error = "";
 
-    $user = $masterDatabaseProvider->getUser($username, $password);
+    $user = $masterDatabaseProvider->getUser($email, $password);
     if ($user === "") {
         $error = "Error logging you in.";
     } else {
@@ -35,63 +35,21 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     </head>
     <body class="bg-light">
-    <nav class="navbar navbar-dark navbar-expand-md sticky-top bg-dark p-0">
-            <a class="navbar-brand col-sm-3 col-md-2 mr-0"
-            href="./">Website Logo</a>
-            <div class="w-100 order-1 order-md-0">
-                <ul class="navbar-nav px-3">
-                </ul>
-            </div>
-            <div class="order-2 order-md-1">
-                <ul class="navbar-nav px-3">
-                    <?php if(isset($user) && $user !== "") {?>
-                        <li class="nav-item text-nowrap">
-                            <a class="nav-link"
-                                href="#"><?php echo $user; ?></a>
-                        </li>
-                        <li class="nav-item text-nowrap">
-                            <a class="nav-link"
-                                href="./logout.php">Logout</a>
-                        </li>
-                    <?php } else {?>
-                        <li class="nav-item text-nowrap">
-                            <a class="nav-link"
-                                href="./login.php">Log in</a>
-                        </li>
-                        <li class="nav-item text-nowrap">
-                            <a class="nav-link"
-                                href="./register.php">Register</a>
-                        </li>
-                    <?php } ?>
-                </ul>
-            </div>
-        </nav>
+        <?php require_once("header/header.php"); ?>
         <main role="main" class="container">
             <div class="my-3 p-3 bg-white rounded box-shadow">
                 <h1>Login Page</h1>
                 <br />
-                <?php if(isset($user) && $user !== "") {?>
-                    <div> Welcome, <?php echo $user; ?>! </div>
-                <?php } else {?>
-                    <?php if(isset($error) && $error !== "") {?>
-                        <div class="alert alert-danger"> <?php echo $error; ?></div>
-                    <?php } ?>
-                    <form action="./login.php" method="post">
-                        <div>
-                            <div class="form-group">
-                                <label class="form-control-label required" for="username">Username</label>
-                                <input type="text" id="username" name="username" required="required" class="form-control">
-                            </div>
-                            <div class="form-group">
-                                <label class="form-control-label required" for="password">Password</label>
-                                <input type="password" id="password" name="password" required="required" class="form-control">
-                            </div>
-                            <div class="form-group">
-                                <button type="submit" id="login" name="login" class="btn-secondary btn">Login</button>
-                            </div>
-                        </div>
-                    </form>
-                <?php } ?>
+                <?php 
+                    if(isset($user) && $user !== "") {
+                        echo '<div> Welcome, ' . $user .'! </div>';
+                    } else {
+                        if(isset($error) && $error !== "") {
+                            echo '<div class="alert alert-danger">' . $error . '</div>';
+                        } 
+                        require_once("form/login-form.php");
+                    }
+                ?>
             </div>
         </main> 
     </body>
